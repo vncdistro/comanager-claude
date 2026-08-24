@@ -1,0 +1,127 @@
+---
+// /chat — AI music-manager launcher (chat input + suggested prompts by manager)
+// Built from the Comanager design system.
+export const prerender = false;
+import Campaign from '../layouts/Campaign.astro';
+
+const SIGNIN = 'https://app.comanager.com/sign-in';
+const SIGNUP = 'https://app.comanager.com/sign-up';
+
+// Each suggested prompt is signed by one of the eight managers (manager-color).
+const prompts = [
+  { p: 'Pitch my song to the right playlists', mgr: 'opportunities', label: 'Opportunities Manager' },
+  { p: 'Find a producer for my next single', mgr: 'ar', label: 'A&R' },
+  { p: 'Plan a week of content in minutes', mgr: 'social', label: 'Social Manager' },
+  { p: 'Book my first hometown show', mgr: 'booking', label: 'Booking Agent' },
+  { p: 'Build a launch plan for my single', mgr: 'marketing', label: 'Marketing Manager' },
+  { p: 'Map out my release timeline', mgr: 'project', label: 'Project Manager' },
+  { p: 'Develop a music video concept', mgr: 'creative', label: 'Creative Director' },
+  { p: 'Win back my quiet superfans', mgr: 'fan', label: 'Fan Manager' },
+  { p: 'Get my track on editorial radar', mgr: 'opportunities', label: 'Opportunities Manager' },
+  { p: 'Turn one song into ten posts', mgr: 'social', label: 'Social Manager' },
+  { p: 'Route my first mini-tour', mgr: 'booking', label: 'Booking Agent' },
+  { p: 'Direct my single cover shoot', mgr: 'creative', label: 'Creative Director' },
+];
+---
+<Campaign
+  title="comanager — What's next for your music?"
+  description="Your AI music manager. Ask what's next for your music — pitching, production, content, booking, release plans — and a full team of managers gets it done."
+  heroImg={null}
+>
+
+<div class="chat">
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <a href="/" aria-label="Comanager — home">
+      <img src="/assets/img/comanager-mark-cream.svg" alt="Comanager" width="45" height="30" />
+    </a>
+    <div class="nav-links">
+      <a href="/#how">How it works</a>
+      <a href="/#pricing">Pricing</a>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:16px">
+    <a class="nav-cta" href={SIGNIN}>Sign in</a>
+    <a class="btn btn-primary btn-sm" href={SIGNUP}>Sign up</a>
+  </div>
+</nav>
+
+<!-- CHAT HERO -->
+<section class="section wrap chat-hero" id="top">
+  <span class="eyebrow"><span class="dot"></span>Your AI music manager</span>
+  <h1 style="margin-top:8px">What's next for <span class="serif">your music?</span></h1>
+  <form class="chat-input" action={SIGNIN} method="get">
+    <button class="ci-plus" type="button" aria-label="Add">+</button>
+    <input type="text" name="q" autocomplete="off" data-typewriter placeholder="Who should produce my next single?" aria-label="Ask your comanager" />
+    <button class="ci-send" type="submit" aria-label="Send">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+  </form>
+</section>
+
+<!-- MANAGERS / PROMPT GRID -->
+<section class="section wrap" id="managers">
+  <div class="sec-head center reveal">
+    <span class="eyebrow" style="justify-content:center"><span class="dot"></span>Your managers</span>
+    <h2 class="sec-title">A full team working <span class="serif">while you make music.</span></h2>
+  </div>
+  <div class="prompt-grid reveal">
+    {prompts.map((x) => (
+      <a class="prompt-card" data-mgr={x.mgr} href={SIGNIN}>
+        <div class="pc-top">
+          <span class="pc-dot"></span>
+          <span class="arrow arrow-sm"></span>
+        </div>
+        <h3>{x.p}</h3>
+        <span class="mgr-tag" data-mgr={x.mgr}><span class="tdot"></span>{x.label}</span>
+      </a>
+    ))}
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer footer-centered section" id="footer">
+  <div class="wrap fc-inner">
+    <img src="/assets/img/comanager-mark-cream.svg" alt="Comanager" width="60" height="40" />
+    <p class="footer-tag" style="margin-top:16px">© 2026 Comanager. All rights reserved.</p>
+    <div class="nav-links" style="justify-content:center;margin-top:14px">
+      <a href="/#">Privacy</a>
+      <a href="/#">Terms</a>
+      <a href="/#">Contact</a>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<!-- Rotating placeholder (small, page-specific enhancement) -->
+<script is:inline>
+  (function () {
+    var el = document.querySelector('[data-typewriter]');
+    if (!el) return;
+    var phrases = [
+      'Who should produce my next single?',
+      'Plan a week of content in minutes',
+      'Which playlists fit my sound?',
+      'Map out my release timeline',
+      'Turn one song into ten posts',
+      'Win back my quiet superfans',
+    ];
+    var pi = 0, ci = 0, deleting = false;
+    function tick() {
+      if (document.activeElement === el) { setTimeout(tick, 900); return; }
+      var full = phrases[pi];
+      ci += deleting ? -1 : 1;
+      el.setAttribute('placeholder', full.slice(0, ci) + (ci < full.length ? '▏' : ''));
+      var delay = deleting ? 35 : 55;
+      if (!deleting && ci === full.length) { deleting = true; delay = 1600; }
+      else if (deleting && ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; delay = 350; }
+      setTimeout(tick, delay);
+    }
+    setTimeout(tick, 700);
+  })();
+</script>
+
+</Campaign>

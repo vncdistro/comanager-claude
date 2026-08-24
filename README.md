@@ -8,6 +8,7 @@ design system on **Astro** (Cloudflare adapter, server output).
 | Path | Owned by | Lives here? |
 |---|---|---|
 | `/` | **Claude Code** (this repo) | ✅ `src/pages/index.astro` — the home page |
+| `/chat` | **Claude Code** (this repo) | ✅ `src/pages/chat.astro` — the AI launcher (chat input + manager prompts) |
 | `/cmngr/<slug>` | **Claude Code** (this repo) | ✅ `src/pages/cmngr/<slug>.astro` — campaign landing pages |
 | `/hub/blog` | **Webflow CMS** | ❌ Not in this repo — do not touch |
 | `/hub/case-studies` | **Webflow CMS** | ❌ Not in this repo — do not touch |
@@ -25,6 +26,7 @@ comanager-claude/
 │   ├── layouts/Campaign.astro     ← shared <head>, inlined CSS, LCP preload, modal, JS
 │   └── pages/
 │       ├── index.astro            ← home page (/)
+│       ├── chat.astro             ← AI launcher (/chat)
 │       └── cmngr/
 │           ├── artist-aura.astro  ← /cmngr/artist-aura
 │           └── social.astro       ← /cmngr/social

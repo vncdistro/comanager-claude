@@ -709,7 +709,8 @@ a{color:inherit;text-decoration:none;}
    Scoped to .social so it doesn't touch other pages. padding-block only, so
    the horizontal gutters from .wrap are preserved. */
 .social > section.section.wrap,
-.home > section.section.wrap{padding-block:clamp(72px,10vh,120px);}
+.home > section.section.wrap,
+.chat > section.section.wrap{padding-block:clamp(72px,10vh,120px);}
 
 /* Bordered pill variant of the eyebrow (no dot) */
 .eyebrow-pill{border:1px solid color-mix(in srgb, var(--accent) 42%, transparent);border-radius:var(--radius-pill);padding:8px 16px;}
@@ -738,3 +739,27 @@ a{color:inherit;text-decoration:none;}
 .plan li::before{content:"";width:6px;height:6px;border-radius:999px;background:var(--accent);margin-top:8px;flex-shrink:0;}
 .plan .btn{width:100%;justify-content:center;}
 @media(max-width:760px){.pricing-grid{grid-template-columns:1fr;}}
+
+/* ============================================================ */
+/* /chat — AI launcher (chat input + manager prompt grid)       */
+/* ============================================================ */
+.chat-hero{text-align:center;}
+.chat-hero .eyebrow{justify-content:center;}
+.chat-input{max-width:660px;margin:clamp(26px,4vh,38px) auto 0;display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--radius-lg);padding:12px 14px;transition:border-color .2s;}
+.chat-input:focus-within{border-color:color-mix(in srgb, var(--accent) 50%, transparent);}
+.chat-input .ci-plus{flex-shrink:0;width:34px;height:34px;border-radius:999px;border:1px solid var(--line-2);background:none;color:var(--text-3);font-size:19px;line-height:0;cursor:pointer;}
+.chat-input input{flex:1;min-width:0;background:none;border:none;outline:none;color:var(--cream);font-family:var(--font-body);font-size:16px;}
+.chat-input input::placeholder{color:var(--text-4);}
+.chat-input .ci-send{flex-shrink:0;width:34px;height:34px;border-radius:999px;border:none;background:var(--cream-dim);color:#060605;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;}
+.chat-input .ci-send svg{width:16px;height:16px;}
+
+.prompt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.prompt-card{position:relative;display:flex;flex-direction:column;gap:14px;min-height:158px;border:1px solid var(--line);border-radius:var(--radius-lg);padding:20px;overflow:hidden;text-decoration:none;transition:transform .18s ease,border-color .18s ease;background:linear-gradient(155deg, color-mix(in srgb, var(--m, transparent) 26%, transparent) 0%, var(--surface) 62%);}
+.prompt-card:hover{transform:translateY(-3px);border-color:color-mix(in srgb, var(--m-bright, var(--cream)) 45%, transparent);}
+.prompt-card .pc-top{display:flex;align-items:center;justify-content:space-between;}
+.prompt-card .pc-dot{width:9px;height:9px;border-radius:999px;background:var(--m-bright, var(--accent));}
+.prompt-card .arrow{color:var(--m-bright, var(--text-3));opacity:.75;}
+.prompt-card h3{flex:1;font-family:var(--font-display);font-weight:600;font-size:clamp(15px,1.35vw,17px);line-height:1.28;letter-spacing:-.01em;color:var(--cream);margin:0;}
+.prompt-card .mgr-tag{align-self:flex-start;}
+@media(max-width:820px){.prompt-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:520px){.prompt-grid{grid-template-columns:1fr;}}
