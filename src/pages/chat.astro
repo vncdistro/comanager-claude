@@ -80,12 +80,27 @@ const SIGNUP = 'https://app.comanager.com/sign-up';
       setTimeout(tick, delay);
     }
     setTimeout(tick, 600);
-    // Submit → app (counts as signup_initiate below via the click/submit hook)
+    // Every interaction hands off to the app so the platform can continue it.
+    var APP = 'https://app.comanager.com/sign-in';
+    function go(promptText, source) {
+      var url = promptText ? APP + '?prompt=' + encodeURIComponent(promptText) : APP;
+      if (window.posthog) posthog.capture('signup_initiate', { ab_lp: (document.cookie.match(/ab-lp=([^;]+)/) || [])[1] || 'none', cta_href: source, cta_text: (promptText || '').slice(0, 120) });
+      window.location.href = url;
+    }
+    // Send (submit) → carries the typed prompt
     var form = ta.closest('form');
     if (form) form.addEventListener('submit', function (e) {
       e.preventDefault();
-      if (window.posthog) posthog.capture('signup_initiate', { ab_lp: (document.cookie.match(/ab-lp=([^;]+)/) || [])[1] || 'none', cta_href: 'chat-input', cta_text: ta.value.slice(0, 60) });
-      window.location.href = 'https://app.comanager.com/sign-in';
+      go(ta.value.trim(), 'chat-input');
+    });
+    // Attach (+) button → straight to sign-in (keeps any typed prompt along)
+    var attach = document.querySelector('button[aria-label="Add attachment"]');
+    if (attach) attach.addEventListener('click', function () {
+      go(ta.value.trim(), 'chat-attach');
+    });
+    // Enter (without Shift) in the textarea also sends
+    ta.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); go(ta.value.trim(), 'chat-input'); }
     });
   })();
 </script>
