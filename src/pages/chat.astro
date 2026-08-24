@@ -1,128 +1,108 @@
 ---
-// /chat — AI music-manager launcher (chat input + suggested prompts by manager)
-// Built from the Comanager design system.
+// /chat — AI launcher. UI reproduced EXACTLY from the supplied reference
+// bundle ("Comanager Landing (standalone).html"): rendered markup + tokens
+// are used verbatim (src/chatref/*), deliberately NOT the shared Campaign
+// layout so no site CSS interferes. Fonts are the same families/weights as
+// the bundle's, served from our self-hosted WOFF2.
+// Kept (non-UI): canonical, PostHog + Clarity + ab-lp stamping, signup_initiate.
 export const prerender = false;
-import Campaign from '../layouts/Campaign.astro';
 
-const SIGNIN = 'https://app.comanager.com/sign-in';
-const SIGNUP = 'https://app.comanager.com/sign-up';
-
-// Each suggested prompt is signed by one of the eight managers (manager-color).
-const prompts = [
-  { p: 'Pitch my song to the right playlists', mgr: 'opportunities', label: 'Opportunities Manager' },
-  { p: 'Find a producer for my next single', mgr: 'ar', label: 'A&R' },
-  { p: 'Plan a week of content in minutes', mgr: 'social', label: 'Social Manager' },
-  { p: 'Book my first hometown show', mgr: 'booking', label: 'Booking Agent' },
-  { p: 'Build a launch plan for my single', mgr: 'marketing', label: 'Marketing Manager' },
-  { p: 'Map out my release timeline', mgr: 'project', label: 'Project Manager' },
-  { p: 'Develop a music video concept', mgr: 'creative', label: 'Creative Director' },
-  { p: 'Win back my quiet superfans', mgr: 'fan', label: 'Fan Manager' },
-  { p: 'Get my track on editorial radar', mgr: 'opportunities', label: 'Opportunities Manager' },
-  { p: 'Turn one song into ten posts', mgr: 'social', label: 'Social Manager' },
-  { p: 'Route my first mini-tour', mgr: 'booking', label: 'Booking Agent' },
-  { p: 'Direct my single cover shoot', mgr: 'creative', label: 'Creative Director' },
-];
+import tokensCss from '../chatref/tokens.css?raw';
+import baseCss from '../chatref/base.css?raw';
+import markup from '../chatref/markup.html?raw';
 ---
-<Campaign
-  title="comanager — What's next for your music?"
-  description="Your AI music manager. Ask what's next for your music — pitching, production, content, booking, release plans — and a full team of managers gets it done."
-  heroImg={null}
-  canonical="https://comanager.com/"
->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>comanager — What's next for your music?</title>
+<meta name="description" content="Your AI music manager. Ask what's next for your music — pitching, production, content, booking, release plans — and a full team of managers gets it done." />
+<meta name="theme-color" content="#060605" />
+<link rel="canonical" href="https://comanager.com/" />
+<style is:inline set:html={tokensCss}></style>
+<style is:inline set:html={baseCss}></style>
+</head>
+<body>
+<Fragment set:html={markup} />
 
-<div class="chat">
-
-<!-- NAV -->
-<nav class="nav">
-  <div class="nav-left">
-    <a href="/" aria-label="Comanager — home">
-      <img src="/assets/img/comanager-mark-cream.svg" alt="Comanager" width="45" height="30" />
-    </a>
-    <div class="nav-links">
-      <a href="/#how">How it works</a>
-      <a href="/#pricing">Pricing</a>
-    </div>
-  </div>
-  <div style="display:flex;align-items:center;gap:16px">
-    <a class="nav-cta" href={SIGNIN}>Sign in</a>
-    <a class="btn btn-primary btn-sm" href={SIGNUP}>Sign up</a>
-  </div>
-</nav>
-
-<!-- CHAT HERO -->
-<section class="section wrap chat-hero" id="top">
-  <span class="eyebrow"><span class="dot"></span>Your AI music manager</span>
-  <h1 style="margin-top:8px">What's next for <span class="serif">your music?</span></h1>
-  <form class="chat-input" action={SIGNIN} method="get">
-    <button class="ci-plus" type="button" aria-label="Add">+</button>
-    <input type="text" name="q" autocomplete="off" data-typewriter placeholder="Who should produce my next single?" aria-label="Ask your comanager" />
-    <button class="ci-send" type="submit" aria-label="Send">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-    </button>
-  </form>
-</section>
-
-<!-- MANAGERS / PROMPT GRID -->
-<section class="section wrap" id="managers">
-  <div class="sec-head center reveal">
-    <span class="eyebrow" style="justify-content:center"><span class="dot"></span>Your managers</span>
-    <h2 class="sec-title">A full team working <span class="serif">while you make music.</span></h2>
-  </div>
-  <div class="prompt-grid reveal">
-    {prompts.map((x) => (
-      <a class="prompt-card" data-mgr={x.mgr} href={SIGNIN}>
-        <div class="pc-top">
-          <span class="pc-dot"></span>
-          <span class="arrow arrow-sm"></span>
-        </div>
-        <h3>{x.p}</h3>
-        <span class="mgr-tag" data-mgr={x.mgr}><span class="tdot"></span>{x.label}</span>
-      </a>
-    ))}
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer class="footer footer-centered section" id="footer">
-  <div class="wrap fc-inner">
-    <img src="/assets/img/comanager-mark-cream.svg" alt="Comanager" width="60" height="40" />
-    <p class="footer-tag" style="margin-top:16px">© 2026 Comanager. All rights reserved.</p>
-    <div class="nav-links" style="justify-content:center;margin-top:14px">
-      <a href="/#">Privacy</a>
-      <a href="/#">Terms</a>
-      <a href="/#">Contact</a>
-    </div>
-  </div>
-</footer>
-
-</div>
-
-<!-- Rotating placeholder (small, page-specific enhancement) -->
+<!-- Typewriter (the bundle animated this at runtime; frozen frame reset) -->
 <script is:inline>
   (function () {
-    var el = document.querySelector('[data-typewriter]');
-    if (!el) return;
+    var tw = document.querySelector('[data-tw]');
+    var ta = document.querySelector('textarea.cm-input');
+    if (!tw || !ta) return;
+    var overlay = tw.parentElement;
     var phrases = [
       'Who should produce my next single?',
+      'Write a pitch for my new single',
       'Plan a week of content in minutes',
       'Which playlists fit my sound?',
       'Map out my release timeline',
-      'Turn one song into ten posts',
-      'Win back my quiet superfans',
+      'Book my first hometown show',
     ];
     var pi = 0, ci = 0, deleting = false;
     function tick() {
-      if (document.activeElement === el) { setTimeout(tick, 900); return; }
+      if (ta.value || document.activeElement === ta) {
+        overlay.style.opacity = '0';
+        setTimeout(tick, 500);
+        return;
+      }
+      overlay.style.opacity = '1';
       var full = phrases[pi];
       ci += deleting ? -1 : 1;
-      el.setAttribute('placeholder', full.slice(0, ci) + (ci < full.length ? '▏' : ''));
-      var delay = deleting ? 35 : 55;
-      if (!deleting && ci === full.length) { deleting = true; delay = 1600; }
+      tw.textContent = full.slice(0, ci);
+      var delay = deleting ? 30 : 55;
+      if (!deleting && ci === full.length) { deleting = true; delay = 1700; }
       else if (deleting && ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; delay = 350; }
       setTimeout(tick, delay);
     }
-    setTimeout(tick, 700);
+    setTimeout(tick, 600);
+    // Submit → app (counts as signup_initiate below via the click/submit hook)
+    var form = ta.closest('form');
+    if (form) form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (window.posthog) posthog.capture('signup_initiate', { ab_lp: (document.cookie.match(/ab-lp=([^;]+)/) || [])[1] || 'none', cta_href: 'chat-input', cta_text: ta.value.slice(0, 60) });
+      window.location.href = 'https://app.comanager.com/sign-in';
+    });
   })();
 </script>
 
-</Campaign>
+<!-- Analytics: PostHog + Microsoft Clarity (same wiring as the rest of the site) -->
+<script is:inline>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog && window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}p||((p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",p.onerror=function(){p=null},(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r));var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="fo po init Fo Oo qo Zs Lo Bo Ro capture Do vo Go calculateEventProperties Vo register register_once register_for_session unregister unregister_for_session Ko Ao Zo getFeatureFlag getFeatureFlagPayload getFeatureFlagResult getAllFeatureFlags isFeatureEnabled reloadFeatureFlags updateFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey displaySurvey cancelPendingSurvey canRenderSurvey canRenderSurveyAsync Yo identify setPersonProperties unsetPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset Xo shutdown setIdentity clearIdentity get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException addExceptionStep captureLog startExceptionAutocapture stopExceptionAutocapture loadToolbar get_property getSessionProperty Qo Uo createPersonProfile setInternalOrTestUser Jo Eo il opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing get_explicit_consent_status is_capturing clear_opt_in_out_capturing Ho debug Js mn getPageViewId captureTraceFeedback captureTraceMetric Co".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    posthog.init('phc_zuvvf2s5CkPF8bdxfPndR4e9WkZjJbWKwxDdATJE96VZ', {
+        api_host: 'https://us.i.posthog.com',
+        defaults: '2026-05-30',
+        person_profiles: 'identified_only',
+    })
+</script>
+<script is:inline>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "ub9vo9s8gv");
+</script>
+<script is:inline>
+  (function () {
+    var m = document.cookie.match(/(?:^|;\s*)ab-lp=([^;]+)/);
+    var variant = m ? decodeURIComponent(m[1]) : null;
+    if (variant) {
+      if (window.posthog) posthog.register({ ab_lp: variant });
+      if (window.clarity) window.clarity('set', 'ab_lp', variant);
+    }
+    document.addEventListener('click', function (e) {
+      var a = e.target && e.target.closest && e.target.closest('a[href*="app.comanager.com"]');
+      if (a && window.posthog) {
+        posthog.capture('signup_initiate', {
+          ab_lp: variant || 'none',
+          cta_href: a.getAttribute('href'),
+          cta_text: (a.textContent || '').trim().slice(0, 60),
+        });
+      }
+    }, true);
+  })();
+</script>
+</body>
+</html>
