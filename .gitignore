@@ -1,0 +1,12 @@
+# Vercel
+.vercel
+
+# Node / Astro / Cloudflare build artifacts
+node_modules/
+dist/
+.astro/
+.wrangler/
+
+# OS / editor cruft
+.DS_Store
+*.log

@@ -1,0 +1,28 @@
+<!-- COMPONENT: Waitlist modal · place ONCE near the end of <body>.
+     Any element with data-open-waitlist opens it. Closes on Esc, backdrop, or [data-close].
+     Email is validated client-side; on success it swaps to the [data-modal-ok] view.
+     NOTE: this only collects the email in-browser. To actually capture leads,
+     a developer must POST the value to your backend in the form's submit handler. -->
+<div class="modal-scrim" id="waitlist" role="dialog" aria-modal="true" aria-labelledby="waitlist-title" hidden>
+  <div class="modal">
+    <button class="close" data-close aria-label="Close">✕</button>
+    <div data-modal-form>
+      <span class="eyebrow"><span class="dot"></span>Free · 5 minutes</span>
+      <h3 id="waitlist-title">Get your Artist Aura.</h3>
+      <p>Drop your email and we'll build your complete brand book — bio, visual world, fan map and roadmap.</p>
+      <form>
+        <input type="email" placeholder="you@yourband.com" autocomplete="email" />
+        <span class="err-msg" hidden>Enter a valid email to continue.</span>
+        <button class="btn btn-primary" type="submit">Build my Aura <span class="arrow"></span></button>
+      </form>
+    </div>
+    <div class="ok" data-modal-ok hidden>
+      <div class="check">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5" /></svg>
+      </div>
+      <h3>You're on the list.</h3>
+      <p>We'll email <strong style="color:var(--cream)" data-ok-email></strong> the moment your Aura is ready.</p>
+      <button class="btn btn-outline" data-close style="justify-content:center;width:100%">Close</button>
+    </div>
+  </div>
+</div>

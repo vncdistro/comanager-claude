@@ -1,0 +1,35 @@
+<!-- COMPONENT: Tinted manager card · the signature card pattern
+     A dark glassy surface holding a blurred blob in the persona's color under a
+     dark veil — it glows in the hue without ever being bright. Set the persona
+     with data-mgr (ar|booking|creative|fan|marketing|opportunities|project|social);
+     it themes the blob, the eyebrow, and the tag dot together.
+
+     Variants:
+       • default  — subtle colored blob (use for most cards)
+       • .solid    — tints the WHOLE surface (use for big "Good News"/service cards)
+     Edit: data-mgr key, eyebrow, headline, body, the tag label, and the button. -->
+<div class="mgr-card-grid">
+
+  <!-- Default (blob) card -->
+  <article class="mgr-card" data-mgr="opportunities">
+    <span class="eyebrow"><span class="dot"></span>New this morning</span>
+    <h3>You'd be the 3rd D.C. artist on "Late Night R&amp;B Drives."</h3>
+    <p>A 12k-follower playlist that fits your sound. We've drafted the pitch — review it and we'll send it on your behalf.</p>
+    <div class="mgr-card-foot">
+      <span class="mgr-tag" data-mgr="opportunities"><span class="tdot"></span>Opportunities Manager</span>
+      <button class="btn btn-outline btn-sm" data-open-waitlist>See match <span class="arrow arrow-sm"></span></button>
+    </div>
+  </article>
+
+  <!-- Solid (full-tint) card -->
+  <article class="mgr-card solid" data-mgr="social">
+    <span class="eyebrow"><span class="dot"></span>Good news</span>
+    <h3>Your IG post hit 10k views in the last 24 hours.</h3>
+    <p>The clip from your studio session is outperforming. Want us to turn it into three more posts this week?</p>
+    <div class="mgr-card-foot">
+      <span class="mgr-tag" data-mgr="social"><span class="tdot"></span>Social Manager</span>
+      <button class="btn btn-outline btn-sm" data-open-waitlist>Review posts <span class="arrow arrow-sm"></span></button>
+    </div>
+  </article>
+
+</div>

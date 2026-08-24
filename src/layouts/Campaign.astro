@@ -1,0 +1,86 @@
+---
+// Shared layout for every campaign landing page.
+// Centralizes the <head>, performance best-practices, the waitlist modal, and
+// the JS bundle — so any new page (src/pages/<slug>.astro) inherits them.
+//
+// Props:
+//   title       (string)  – <title> + og:title
+//   description (string)  – meta description + og:description
+//   heroImg     (string)  – the LCP hero image URL; preloaded with high
+//                           priority so it is discovered before CSS loads.
+//                           Pass the same URL the section's background uses.
+//   ogImage     (string?) – social share image URL (optional)
+//   accent/glow (string?) – per-campaign theme overrides (optional)
+const {
+  title,
+  description = '',
+  heroImg = '/assets/img/brand-hero.webp',
+  ogImage,
+  accent,
+  glow,
+} = Astro.props;
+
+import cssRaw from '../../public/assets/css/styles.css?raw';
+
+const BASE = (import.meta.env.BASE_URL || '/').replace(/\/+$/, '');
+const js = `${BASE}/assets/js/components.js`;
+const themeCss = `:root{${accent ? `--accent:${accent};` : ''}${glow ? `--glow:${glow};` : ''}}`;
+
+// Inline the stylesheet to remove the render-blocking CSS request from the
+// critical path. Relative url()s (fonts/images) are rewritten to absolute mount
+// paths since they'd otherwise resolve against the page URL instead of the CSS.
+const inlineCss = cssRaw
+  .replaceAll('../fonts/', `${BASE}/assets/fonts/`)
+  .replaceAll('../img/', `${BASE}/assets/img/`);
+---
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="theme-color" content="#060605" />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+{ogImage && <meta property="og:image" content={ogImage} />}
+
+{/* Perf: make the LCP hero discoverable immediately (it's a CSS background,
+    so the browser otherwise can't find it until styles.css parses). */}
+{heroImg && <link rel="preload" as="image" href={heroImg} fetchpriority="high" />}
+<style is:inline set:html={inlineCss}></style>
+{(accent || glow) && <style is:inline set:html={themeCss}></style>}
+</head>
+<body>
+<div class="grain"></div>
+
+<slot />
+
+<!-- WAITLIST MODAL — shared across all campaign pages, rendered exactly once -->
+<div class="modal-scrim" id="waitlist" role="dialog" aria-modal="true" aria-labelledby="waitlist-title" hidden>
+  <div class="modal">
+    <button class="close" data-close aria-label="Close">✕</button>
+    <div data-modal-form>
+      <span class="eyebrow"><span class="dot"></span>Free · 5 minutes</span>
+      <h3 id="waitlist-title">Get your Artist Aura.</h3>
+      <p>Drop your email and we'll build your complete brand book — bio, visual world, fan map and roadmap.</p>
+      <form>
+        <input type="email" placeholder="you@yourband.com" autocomplete="email" />
+        <span class="err-msg" hidden>Enter a valid email to continue.</span>
+        <button class="btn btn-primary" type="submit">Build my Aura <span class="arrow"></span></button>
+      </form>
+    </div>
+    <div class="ok" data-modal-ok hidden>
+      <div class="check"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5" /></svg></div>
+      <h3>You're on the list.</h3>
+      <p>We'll email <strong style="color:var(--cream)" data-ok-email></strong> the moment your Aura is ready.</p>
+      <button class="btn btn-outline" data-close style="justify-content:center;width:100%">Close</button>
+    </div>
+  </div>
+</div>
+
+<script is:inline src={js}></script>
+</body>
+</html>
