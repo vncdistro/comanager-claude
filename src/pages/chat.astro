@@ -82,6 +82,16 @@ const SIGNUP = 'https://app.comanager.com/sign-up';
       setTimeout(tick, delay);
     }
     setTimeout(tick, 600);
+    // Send button: off-white (primary) only while the user has typed something.
+    var sendBtn = document.querySelector('button[aria-label="Send"]');
+    function updateSend() {
+      if (!sendBtn) return;
+      if (ta.value.trim()) { sendBtn.style.background = 'rgb(224, 219, 191)'; sendBtn.style.color = 'rgb(6, 6, 5)'; }
+      else { sendBtn.style.background = 'rgb(47, 46, 41)'; sendBtn.style.color = 'rgb(143, 139, 122)'; }
+    }
+    ta.addEventListener('input', updateSend);
+    updateSend();
+
     // Every interaction hands off to the app so the platform can continue it.
     var APP = 'https://app.comanager.com/sign-in';
     function go(promptText, source) {
