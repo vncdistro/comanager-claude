@@ -9,6 +9,8 @@
 // shared Campaign layout automatically.
 export const prerender = false;
 import Campaign from '../../layouts/Campaign.astro';
+import SiteNav from '../../components/SiteNav.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
 ---
 <Campaign
   title="Comanager — Let us make your artist brand book"
@@ -16,21 +18,17 @@ import Campaign from '../../layouts/Campaign.astro';
   heroImg="/assets/img/hero-aura.webp"
 >
 
-<!-- NAV -->
-<nav class="nav">
-  <div class="nav-left">
-    <a href="https://comanager.com" aria-label="Comanager — home">
-      <img src="/assets/img/comanager-mark-cream.svg" alt="Comanager" width="45" height="30" />
-    </a>
-    <div class="nav-links">
-      <a href="#aura">Aura</a>
-      <a href="#how">How it works</a>
-      <a href="#quotes">Artists</a>
-      <a href="http://comanager.com/#pricing">Pricing</a>
-    </div>
-  </div>
-  <a class="nav-cta" href="https://app.comanager.com/sign-in">Meet Your Managers <span class="arrow"></span></a>
-</nav>
+<!-- NAV (chat-style, componentized) -->
+<SiteNav
+  overlay={true}
+  links={[
+    { label: 'Aura', href: '#aura' },
+    { label: 'How it works', href: '#how' },
+    { label: 'Artists', href: '#quotes' },
+    { label: 'Pricing', href: 'http://comanager.com/#pricing' },
+  ]}
+  actions={[{ label: 'Meet Your Managers', href: 'https://app.comanager.com/sign-in', kind: 'pill' }]}
+/>
 
 <!-- HERO (split) -->
 <header class="hero section" data-side="right" id="top" style="--hero-img:url('/assets/img/hero-aura.webp')">
@@ -128,12 +126,7 @@ import Campaign from '../../layouts/Campaign.astro';
   </div>
 </section>
 
-<!-- FOOTER (centered, minimal) -->
-<footer class="footer footer-centered section" id="footer">
-  <div class="wrap fc-inner">
-    <img src="/assets/img/comanager-mark-cream.svg" alt="Comanager" width="69" height="46" />
-    <p class="footer-tag">A music manager for independent artists — pitches, strategy and content, so you can focus on the music.</p>
-  </div>
-</footer>
+<!-- FOOTER (chat-style, componentized) -->
+<SiteFooter text="A music manager for independent artists — pitches, strategy and content, so you can focus on the music." />
 
 </Campaign>

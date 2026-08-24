@@ -3,6 +3,8 @@
 // Built entirely from the Comanager design system.
 export const prerender = false;
 import Campaign from '../layouts/Campaign.astro';
+import SiteNav from '../components/SiteNav.astro';
+import SiteFooter from '../components/SiteFooter.astro';
 
 const SIGNIN = 'https://app.comanager.com/sign-in';
 
@@ -92,21 +94,17 @@ const faqLd = {
 
 <div class="home">
 
-<!-- NAV -->
-<nav class="nav">
-  <div class="nav-left">
-    <a href="/" aria-label="Comanager — home">
-      <img src="/assets/img/comanager-mark-cream.svg" alt="Comanager" width="45" height="30" />
-    </a>
-    <div class="nav-links">
-      <a href="#how">How it works</a>
-      <a href="#aura">Aura</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#faq">FAQ</a>
-    </div>
-  </div>
-  <a class="nav-cta" href={SIGNIN}>Start free <span class="arrow"></span></a>
-</nav>
+<!-- NAV (chat-style, componentized) -->
+<SiteNav
+  overlay={true}
+  links={[
+    { label: 'How it works', href: '#how' },
+    { label: 'Aura', href: '#aura' },
+    { label: 'Pricing', href: '#pricing' },
+    { label: 'FAQ', href: '#faq' },
+  ]}
+  actions={[{ label: 'Start free', href: SIGNIN, kind: 'pill' }]}
+/>
 
 <!-- HERO -->
 <header class="hero section" data-side="right" id="top" style="--hero-img:url('/assets/img/hero-aura.webp')">
@@ -283,13 +281,8 @@ const faqLd = {
   </div>
 </section>
 
-<!-- FOOTER -->
-<footer class="footer footer-centered section" id="footer">
-  <div class="wrap fc-inner">
-    <img src="/assets/img/comanager-mark-cream.svg" alt="Comanager" width="69" height="46" />
-    <p class="footer-tag">A manager for every independent artist.<br />Built by people who've managed artists.</p>
-  </div>
-</footer>
+<!-- FOOTER (chat-style, componentized) -->
+<SiteFooter text="A manager for every independent artist. Built by people who've managed artists." />
 
 </div>
 

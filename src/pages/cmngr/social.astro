@@ -4,6 +4,8 @@
 // trailing slashes). Built entirely from the Comanager design system.
 export const prerender = false;
 import Campaign from '../../layouts/Campaign.astro';
+import SiteNav from '../../components/SiteNav.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
 
 const SIGNIN = 'https://app.comanager.com/sign-in';
 
@@ -102,20 +104,16 @@ const faqLd = {
 
 <div class="social">
 
-<!-- NAV -->
-<nav class="nav">
-  <div class="nav-left">
-    <a href="https://comanager.com" aria-label="Comanager — home">
-      <img src="/assets/img/comanager-mark-cream.svg" alt="Comanager" width="45" height="30" />
-    </a>
-    <div class="nav-links">
-      <a href="#platforms">Platforms</a>
-      <a href="#content">Content</a>
-      <a href="#faq">FAQ</a>
-    </div>
-  </div>
-  <a class="nav-cta" href={SIGNIN}>Create my strategy <span class="arrow"></span></a>
-</nav>
+<!-- NAV (chat-style, componentized) -->
+<SiteNav
+  overlay={true}
+  links={[
+    { label: 'Platforms', href: '#platforms' },
+    { label: 'Content', href: '#content' },
+    { label: 'FAQ', href: '#faq' },
+  ]}
+  actions={[{ label: 'Create my strategy', href: SIGNIN, kind: 'pill' }]}
+/>
 
 <!-- HERO -->
 <header class="hero section" data-side="right" id="top" style="--hero-img:url('/assets/img/hero-social.webp')">
@@ -364,13 +362,8 @@ const faqLd = {
   </div>
 </section>
 
-<!-- FOOTER -->
-<footer class="footer footer-centered section" id="footer">
-  <div class="wrap fc-inner">
-    <img src="/assets/img/comanager-mark-cream.svg" alt="Comanager" width="69" height="46" />
-    <p class="footer-tag">Built for independent artists.<br />Powered by comanager.</p>
-  </div>
-</footer>
+<!-- FOOTER (chat-style, componentized) -->
+<SiteFooter text="Built for independent artists. Powered by comanager." />
 
 </div>
 

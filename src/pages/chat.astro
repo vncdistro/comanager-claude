@@ -10,6 +10,11 @@ export const prerender = false;
 import tokensCss from '../chatref/tokens.css?raw';
 import baseCss from '../chatref/base.css?raw';
 import markup from '../chatref/markup.html?raw';
+import SiteNav from '../components/SiteNav.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+
+const SIGNIN = 'https://app.comanager.com/sign-in';
+const SIGNUP = 'https://app.comanager.com/sign-up';
 ---
 <!doctype html>
 <html lang="en">
@@ -24,7 +29,24 @@ import markup from '../chatref/markup.html?raw';
 <style is:inline set:html={baseCss}></style>
 </head>
 <body>
+<SiteNav
+  links={[
+    { label: 'How it works', href: '/#how' },
+    { label: 'Pricing', href: '/#pricing' },
+  ]}
+  actions={[
+    { label: 'Sign in', href: SIGNIN, kind: 'link', blank: true },
+    { label: 'Sign up', href: SIGNUP, kind: 'pill', blank: true },
+  ]}
+/>
 <Fragment set:html={markup} />
+<SiteFooter
+  links={[
+    { label: 'Privacy', href: SIGNIN, blank: true },
+    { label: 'Terms', href: SIGNIN, blank: true },
+    { label: 'Contact', href: SIGNIN, blank: true },
+  ]}
+/>
 
 <!-- Typewriter (the bundle animated this at runtime; frozen frame reset) -->
 <script is:inline>
