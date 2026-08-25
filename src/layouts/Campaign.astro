@@ -127,6 +127,27 @@ const inlineCss = cssRaw
         });
       }
     }, true);
+
+    // UTM decorator: tag every outbound link (app + partner) with a
+    // consistent schema so the platform can attribute the click.
+    var page = location.pathname === '/' ? 'home'
+      : location.pathname.replace(/^\/+|\/+$/g, '').replace(/\//g, '-');
+    function slug(s) {
+      return (s || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 48) || 'link';
+    }
+    document.querySelectorAll('a[href*="app.comanager.com"], a[href*="venicemusic.co"]').forEach(function (a) {
+      try {
+        var u = new URL(a.getAttribute('href'), location.origin);
+        if (u.searchParams.get('utm_source')) return; // don't double-tag
+        u.searchParams.set('utm_source', 'comanager.com');
+        u.searchParams.set('utm_medium', 'website');
+        u.searchParams.set('utm_campaign', page);
+        u.searchParams.set('utm_content', a.dataset.utm
+          || (u.searchParams.get('prompt') ? 'card-' + slug(u.searchParams.get('prompt')) : slug(a.textContent)));
+        if (variant) u.searchParams.set('utm_term', 'ab-' + variant);
+        a.setAttribute('href', u.toString());
+      } catch (err) {}
+    });
   })();
 </script>
 </body>

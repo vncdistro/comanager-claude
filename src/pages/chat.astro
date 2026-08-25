@@ -95,9 +95,16 @@ const SIGNUP = 'https://app.comanager.com/sign-up';
     // Every interaction hands off to the app so the platform can continue it.
     var APP = 'https://app.comanager.com/sign-in';
     function go(promptText, source) {
-      var url = promptText ? APP + '?prompt=' + encodeURIComponent(promptText) : APP;
-      if (window.posthog) posthog.capture('signup_initiate', { ab_lp: (document.cookie.match(/ab-lp=([^;]+)/) || [])[1] || 'none', cta_href: source, cta_text: (promptText || '').slice(0, 120) });
-      window.location.href = url;
+      var u = new URL(APP);
+      if (promptText) u.searchParams.set('prompt', promptText);
+      u.searchParams.set('utm_source', 'comanager.com');
+      u.searchParams.set('utm_medium', 'website');
+      u.searchParams.set('utm_campaign', location.pathname === '/' ? 'home' : 'chat');
+      u.searchParams.set('utm_content', source);
+      var abv = (document.cookie.match(/ab-lp=([^;]+)/) || [])[1];
+      if (abv) u.searchParams.set('utm_term', 'ab-' + abv);
+      if (window.posthog) posthog.capture('signup_initiate', { ab_lp: abv || 'none', cta_href: source, cta_text: (promptText || '').slice(0, 120) });
+      window.location.href = u.toString();
     }
     // Send (submit) → carries the typed prompt
     var form = ta.closest('form');
@@ -151,6 +158,26 @@ const SIGNUP = 'https://app.comanager.com/sign-up';
         });
       }
     }, true);
+
+    // UTM decorator (same schema as the rest of the site)
+    var page = location.pathname === '/' ? 'home'
+      : location.pathname.replace(/^\/+|\/+$/g, '').replace(/\//g, '-');
+    function slug(s) {
+      return (s || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 48) || 'link';
+    }
+    document.querySelectorAll('a[href*="app.comanager.com"], a[href*="venicemusic.co"]').forEach(function (a) {
+      try {
+        var u = new URL(a.getAttribute('href'), location.origin);
+        if (u.searchParams.get('utm_source')) return;
+        u.searchParams.set('utm_source', 'comanager.com');
+        u.searchParams.set('utm_medium', 'website');
+        u.searchParams.set('utm_campaign', page);
+        u.searchParams.set('utm_content', a.dataset.utm
+          || (u.searchParams.get('prompt') ? 'card-' + slug(u.searchParams.get('prompt')) : slug(a.textContent)));
+        if (variant) u.searchParams.set('utm_term', 'ab-' + variant);
+        a.setAttribute('href', u.toString());
+      } catch (err) {}
+    });
   })();
 </script>
 </body>
