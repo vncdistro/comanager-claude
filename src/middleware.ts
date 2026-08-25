@@ -15,6 +15,24 @@ export const onRequest = defineMiddleware((context, next) => {
 
   let variant = context.cookies.get(COOKIE)?.value;
 
+  // Team override: ?ab=control | ?ab=off  → force the control page
+  //                ?ab=test    | ?ab=variant → force the /chat variant
+  // The choice is written to the cookie so it sticks for that browser
+  // (switch again with the opposite value). ab-forced marks the visit so
+  // analytics can filter internal checks out.
+  const forced = context.url.searchParams.get('ab');
+  if (forced) {
+    const want = forced === 'test' || forced === 'variant' ? TEST
+      : forced === 'control' || forced === 'off' ? CONTROL
+      : null;
+    if (want) {
+      variant = want;
+      context.cookies.set(COOKIE, want, { path: '/', maxAge: 31536000, httpOnly: false, sameSite: 'lax' });
+      context.cookies.set('ab-forced', '1', { path: '/', maxAge: 31536000, httpOnly: false, sameSite: 'lax' });
+      return want === TEST ? next(VARIANT_PATH) : next();
+    }
+  }
+
   if (variant !== CONTROL && variant !== TEST) {
     // First visit: assign 50/50 and persist for a year.
     variant = Math.random() < 0.5 ? CONTROL : TEST;

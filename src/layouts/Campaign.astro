@@ -111,8 +111,8 @@ const inlineCss = cssRaw
     var m = document.cookie.match(/(?:^|;\s*)ab-lp=([^;]+)/);
     var variant = m ? decodeURIComponent(m[1]) : null;
     if (variant) {
-      // Rides along on every PostHog event from this browser.
-      if (window.posthog) posthog.register({ ab_lp: variant });
+      var forced = /(?:^|;\s*)ab-forced=1/.test(document.cookie);
+      if (window.posthog) posthog.register(forced ? { ab_lp: variant, ab_forced: true } : { ab_lp: variant });
       // Lets Clarity recordings/heatmaps be filtered by variant.
       if (window.clarity) window.clarity('set', 'ab_lp', variant);
     }
